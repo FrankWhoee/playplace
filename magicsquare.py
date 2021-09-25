@@ -1,6 +1,11 @@
 import numpy as np
 import itertools
 
+# Brute force magic square solution.
+# HOW-TO:
+# Flatten your square, and fill in unknowns with -1, then reshape back into square dimensions.
+#
+
 square = np.array([19, 89, 84, -1, 74, -1, 49, 59, -1, -1, 69, 39, -1, 29, -1, -1]).reshape(4, 4)
 sol = [24, 34, 44, 54, 64, 79, 94]
 
@@ -27,18 +32,6 @@ def verify(input):
 
 
 permutations = []
-
-
-def permute():
-    global permutations
-    for a in range(7):
-        for b in range(a + 1, a + 6):
-            for c in range(b+1, b + 5):
-                for d in range(c+1, c + 4):
-                    for e in range(d + 1, d + 3):
-                        for f in range(e + 1, e + 2):
-                            permutations.append([sol[a%7], sol[b%7], sol[c%7], sol[d%7],sol[e%7],sol[f%7],sol[(f+1) % 7]])
-
 
 
 def fill(grid,solution):
