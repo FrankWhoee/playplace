@@ -6,15 +6,15 @@ import numpy as np
 randoms = []
 for i in range(int(sys.argv[1])):
 	randoms.append(randint(0,100) * 4)
-for i in randoms:
+for i,j in zip(randoms,range(1,len(randoms)+1)):
 	print("""
-	            .long 0    # student ID
+	            .long {}    # student ID
 		    .long 0      # grade 0
 		    .long 0      # grade 1
 		    .long 0      # grade 2
 		    .long {}      # grade 3
 		    .long 0       # computed average
-	""".format(i))
+	""".format(j,i))
 print(np.asarray(randoms)/4)
 randoms.sort()
 print(np.asarray(randoms)/4)
