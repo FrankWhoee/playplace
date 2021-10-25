@@ -46,7 +46,7 @@ for i in range(n):
 	if validatebrackets(genvalidbrackets(10)):
 		s += 1
 for i in range(10):
-	print(genvalidbrackets(15))
+	print(genvalidbrackets(30))
 print(genvalidbrackets(10))
 print(validatebrackets("()[](((([]))))"))
 print("Success: " + str(s * 100/n) + "%")
