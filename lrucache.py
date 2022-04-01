@@ -1,5 +1,5 @@
 slots = 4
-access = "A,G,G,D,E,G,G,B,E,E,E,D,G,B,C,C,A,D,B,B"
+access = "A,B,A,B,G,B,B,A,A,D,A,E,A,C,E,G,D,B,G,E"
 access = access.split(",")
 
 cache = []
