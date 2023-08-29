@@ -9,7 +9,7 @@ import (
 
 func main() {
 	// open file
-	f, err := os.Open("/home/fhui/Playplace/fiveletterset/fiveletterset.txt")
+	f, err := os.Open("/home/huifr/playplace/fiveletterset/fiveletterset.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -28,16 +28,64 @@ func main() {
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
+
+	fmt.Println(get_distinct_words(all_words, 5))
+}
+
+func test(a []int) {
+	a = append(a, 69)
 }
 
 func get_distinct_words(all_words []string, n int) []string {
-
+	return helper(all_words, n)
 }
 
-func helper(allowable_words []string, picked_words []string, depth int) []string {
-	// pick a word
-	// move all words that share letters to the left
-	// if there are still words to the right,
-	// pass slice with pointer starting where words are allowed, recursively
-	// otherwise, move word to the left, pick another word and start again
+func string_to_set(s string) map[int32]bool {
+	output := make(map[int32]bool)
+	for _, letter := range s {
+		output[letter] = true
+	}
+	return output
+}
+
+func word_shares_letters(word string, letters map[int32]bool) bool {
+	for _, ch := range word {
+		if _, exists := letters[ch]; !exists {
+			return true
+		}
+	}
+	return false
+}
+
+func helper(allowable_words []string, depth int) []string {
+	// while the current picked word is less than len of allowable word
+	for i := 0; i < len(allowable_words); i++ {
+		i_discard := i + 1
+		// pick the first word that is not discarded
+		current_word := allowable_words[i]
+		// move all words that share letters to the left
+		current_letters := string_to_set(current_word)
+		for _, word := range allowable_words[i:] {
+			if !word_shares_letters(word, current_letters) {
+				allowable_words[i], allowable_words[i_discard] = allowable_words[i_discard], allowable_words[i]
+				i_discard++
+			}
+		}
+		// if there are still words to the right,
+		if i_discard < len(allowable_words) {
+			// end if we've reached sufficient depth
+			if depth == 1 {
+				output := make([]string, 0)
+				return append(output, current_word)
+			} else {
+				// pass slice with pointer starting where words are allowed, recursively
+				output := helper(allowable_words[i_discard:], depth-1)
+				// If the output is not None, break and return the result with chosen word added to picked_words
+				if output != nil {
+					return append(output, current_word)
+				}
+			}
+		}
+	}
+	return nil
 }
