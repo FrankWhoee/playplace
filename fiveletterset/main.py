@@ -12,9 +12,11 @@ if not file_exists("fiveletterset.txt"):
     with open(filename, "r") as f:
         words.extend(f.read().split("\n"))
     fiveletterwords = []
+    addedwordsets = []
     for word in words:
-        if len(word) == 5 and len(set(word)) == 5:
+        if len(word) == 5 and len(set(word)) == 5 and set(word) not in addedwordsets:
             fiveletterwords.append(word)
+            addedwordsets.append(set(word))
 
     # write the list to a file
     with open("fiveletterset.txt", "w") as f:

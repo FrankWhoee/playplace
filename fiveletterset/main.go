@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 )
 
 func main() {
@@ -28,12 +29,24 @@ func main() {
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
-
-	fmt.Println(get_distinct_words(all_words, 5))
-}
-
-func get_distinct_words(all_words []string, n int) []string {
-	return helper(all_words, n)
+	start := time.Now()
+	valid_words := make([]string, 0)
+	output := get_distinct_words(all_words, 5)
+	for output != nil && len(all_words) > 0 {
+		fmt.Println(output)
+		valid_words = append(valid_words, output...)
+		for _, word := range output {
+			for j := 0; j < len(all_words); j++ {
+				if all_words[j] == word {
+					all_words = append(all_words[:j], all_words[j+1:]...)
+					break
+				}
+			}
+		}
+		output = get_distinct_words(all_words, 5)
+	}
+	end := time.Now()
+	fmt.Println(end.Sub(start))
 }
 
 func string_to_set(s string) map[int32]bool {
@@ -53,8 +66,7 @@ func word_shares_letters(word string, letters map[int32]bool) bool {
 	return false
 }
 
-func helper(allowable_words []string, depth int) []string {
-	fmt.Println(len(allowable_words))
+func get_distinct_words(allowable_words []string, depth int) []string {
 	// while the current picked word is less than len of allowable word
 	for i := 0; i < len(allowable_words); i++ {
 		i_discard := i + 1
@@ -69,14 +81,14 @@ func helper(allowable_words []string, depth int) []string {
 			}
 		}
 		// if there are still words to the right,
-		if i_discard < len(allowable_words) {
+		if i_discard <= len(allowable_words) {
 			// end if we've reached sufficient depth
 			if depth == 1 {
 				output := make([]string, 0)
 				return append(output, current_word)
 			} else {
 				// pass slice with pointer starting where words are allowed, recursively
-				output := helper(allowable_words[i_discard:], depth-1)
+				output := get_distinct_words(allowable_words[i_discard:], depth-1)
 				// If the output is not None, break and return the result with chosen word added to picked_words
 				if output != nil {
 					return append(output, current_word)
